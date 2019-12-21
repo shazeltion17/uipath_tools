@@ -1,0 +1,7 @@
+README.md
+setup.py
+pathology.egg-info/PKG-INFO
+pathology.egg-info/SOURCES.txt
+pathology.egg-info/dependency_links.txt
+pathology.egg-info/not-zip-safe
+pathology.egg-info/top_level.txt

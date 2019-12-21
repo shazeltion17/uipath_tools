@@ -1,0 +1,7 @@
+README.md
+setup.py
+uipath_tools.egg-info/PKG-INFO
+uipath_tools.egg-info/SOURCES.txt
+uipath_tools.egg-info/dependency_links.txt
+uipath_tools.egg-info/not-zip-safe
+uipath_tools.egg-info/top_level.txt
