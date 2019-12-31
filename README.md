@@ -15,8 +15,8 @@ from uipath_tools import uipathorchestratorapi as uip
 
 con = uip.UiPathConnection('<url>', '<tenant>', '<username>', '<password>')
 con.authenticate()
-releaseKey = con.getReleaseKey("<job_environment>")
-con.startJob(releaseKey)
+releaseKey = con.get_release_key("<job_environment>")
+con.start_job(releaseKey)
 ```
 ## Contact
 
