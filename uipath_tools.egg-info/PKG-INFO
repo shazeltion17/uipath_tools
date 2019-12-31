@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: uipath-tools
-Version: 0.1
+Version: 0.2
 Summary: This is a wrapper for the UiPath orchestrator API
 Home-page: https://github.com/shazeltion17/uipath_tools
 Author: Samuel Ehrlich

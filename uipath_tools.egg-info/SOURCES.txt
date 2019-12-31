@@ -1,5 +1,7 @@
 README.md
 setup.py
+uipath_tools/__init__.py
+uipath_tools/uipathorchestratorapi.py
 uipath_tools.egg-info/PKG-INFO
 uipath_tools.egg-info/SOURCES.txt
 uipath_tools.egg-info/dependency_links.txt
