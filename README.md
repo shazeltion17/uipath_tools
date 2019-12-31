@@ -18,3 +18,6 @@ con.authenticate()
 releaseKey = con.getReleaseKey("<job_environment>")
 con.startJob(releaseKey)
 ```
+## Contact
+
+For more information and feature requests please contact: samuel.ehrlich@fireanalytics.tech
