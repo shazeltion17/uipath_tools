@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='uipath_tools',
-      version='0.2',
+      version='0.3',
       url='https://github.com/shazeltion17/uipath_tools',
       license='MIT',
       author='Samuel Ehrlich',

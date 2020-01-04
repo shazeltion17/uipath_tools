@@ -107,7 +107,6 @@ class UiPathConnection:
             except IndexError:
                 raise IndexError('Please make sure the name of the job is correct and the job is running')
 
-
         else:
             raise ValueError("Server Error: " + str(r.status_code) + '.  ' + r.json()['message'])
 
@@ -200,4 +199,3 @@ class UiPathConnection:
             print('Robot has successfully been created')
         else:
             raise ValueError("Server Error: " + str(r.status_code) + '.  ' + r.json()['message'])
-
