@@ -48,7 +48,6 @@ class UiPathConnection:
             raise ValueError("You must authenticate first")
 
         url = self.base_url + f'/odata/Releases?$filter=contains(Name, \'{job_name}\')'
-        print(url)
         headers = {'content-type': 'application/json', 'Authorization': 'Bearer ' + self.token}
 
         r = requests.get(url, headers=headers)
@@ -81,6 +80,7 @@ class UiPathConnection:
 
         if r.status_code == 201:
             print('Robot Job has successfully been initiated')
+            return True
         else:
             raise ValueError("Server Error: " + str(r.status_code) + '.  ' + r.json()['message'])
 
