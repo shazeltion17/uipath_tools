@@ -14,31 +14,31 @@ class UiPathConnection:
             tenant: Name of tenant to connect to
             username: username of the admin
             password: password for the username
+            token: used for future authentication
         """
         self.base_url = url
         self.tenant = tenant
-        self.username = username
-        self.password = password
-        self.token = None
+        self.token = self._authenticate(username, password, tenant)
 
-    def authenticate(self):
+    def _authenticate(self, username, password, tenant):
 
         """Authenticate. This will store the token for future usage as the authentication method for UiPath Rest
         API is Bearer Token authentication"""
 
         payload = str(
-                {"tenancyName": self.tenant,
-                 "usernameOrEmailAddress": self.username,
-                 "password": self.password}
-            )
+                {"tenancyName": tenant,
+                 "usernameOrEmailAddress": username,
+                 "password": password}
+                     )
         headers = {'content-type': 'application/json'}
         url = self.base_url + '/api/Account/Authenticate'
         r = requests.post(url, data=payload, headers=headers)
 
         if r.status_code == 200:
             return_value = r.json()
-            self.token = return_value['result']
             print('Authenticated')
+            return return_value['result']
+
         else:
             raise ValueError("Server Error: " + str(r.status_code) + '.  ' + r.json()['message'])
 
@@ -63,7 +63,7 @@ class UiPathConnection:
 
     def start_job(self, release_key):
 
-        """Starts a jon with the given release key"""
+        """Starts a job with the given release key"""
 
         if self.token is None:
             raise ValueError("You must authenticate first")
