@@ -5,7 +5,7 @@ class UiPathConnection:
 
     """Base class for initial functions and storing authentication credentials"""
 
-    def __init__(self, url, tenant, username, password):
+    def __init__(self, url, tenant, username, password, cloud=False, tenant_logical_name='', client_id='', user_key=''):
 
         """Initialize the class
 
@@ -14,25 +14,53 @@ class UiPathConnection:
             tenant: Name of tenant to connect to
             username: username of the admin
             password: password for the username
-            token: used for future authentication
+
+        NOTE: These parameters only need to be entered if you are on the cloud version of UiPath
+
+            url: "https://platform.uipath.com/[Account Logical Name]/[Tenant Logical Name]"
+            cloud: Needs to be set to True if this is the cloud platform
+            tenant_logical_name: Can be found on the website for your tenant
+            client_id: can be found on the website for your tenant
+            user_key: can be found on the website
+
+
         """
         self.base_url = url
         self.tenant = tenant
-        self.token = self._authenticate(username, password, tenant)
+        self.cloud = cloud
+        self.tenant_logical_name = tenant_logical_name
+        self.token = self._authenticate(username, password, tenant, tenant_logical_name, client_id, user_key)
 
-    def _authenticate(self, username, password, tenant):
+    def _authenticate(self, username, password, tenant, tenant_logical_name, client_id, user_key):
 
         """Authenticate. This will store the token for future usage as the authentication method for UiPath Rest
-        API is Bearer Token authentication"""
+        API is Bearer Token authentication.
 
-        payload = str(
-                {"tenancyName": tenant,
-                 "usernameOrEmailAddress": username,
-                 "password": password}
-                     )
-        headers = {'content-type': 'application/json'}
-        url = self.base_url + '/api/Account/Authenticate'
-        r = requests.post(url, data=payload, headers=headers)
+        There are two types of authentication.  One for cloud environments and one for on-premise.  The following
+        accounts for this.
+
+        """
+
+        if self.cloud:
+            payload = str(
+                {"grant_type": "refresh_token",
+                 "client_id": client_id,
+                 "refresh_token": user_key}
+            )
+            headers = {'content-type': 'application/json', 'X-UIPATH-TenantName': tenant_logical_name}
+            url = 'https://account.uipath.com/oauth/token'
+            r = requests.post(url, data=payload, headers=headers)
+            print(r)
+
+        else:
+            payload = str(
+                    {"tenancyName": tenant,
+                     "usernameOrEmailAddress": username,
+                     "password": password}
+                         )
+            headers = {'content-type': 'application/json'}
+            url = self.base_url + '/api/Account/Authenticate'
+            r = requests.post(url, data=payload, headers=headers)
 
         if r.status_code == 200:
             return_value = r.json()
@@ -60,7 +88,7 @@ class UiPathConnection:
 
         return release_key
 
-    def start_job(self, release_key):
+    def start_job(self, release_key, inputs):
 
         """Starts a job with the given release key"""
 
@@ -72,7 +100,8 @@ class UiPathConnection:
         payload = str(
                         {
                             "startInfo": {
-                                "ReleaseKey": release_key
+                                "ReleaseKey": release_key,
+                                "InputArguments": inputs
                                }
                         }
                       )
