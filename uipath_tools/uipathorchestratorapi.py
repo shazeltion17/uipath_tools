@@ -88,7 +88,7 @@ class UiPathConnection:
 
         return release_key
 
-    def start_job(self, release_key, inputs):
+    def start_job(self, release_key, inputs=None):
 
         """Starts a job with the given release key"""
 
@@ -97,14 +97,24 @@ class UiPathConnection:
 
         url = self.base_url + '/odata/Jobs/UiPath.Server.Configuration.OData.StartJobs'
         headers = {'content-type': 'application/json', 'Authorization': 'Bearer ' + self.token}
-        payload = str(
-                        {
-                            "startInfo": {
-                                "ReleaseKey": release_key,
-                                "InputArguments": inputs
-                               }
-                        }
-                      )
+
+        if inputs is not None:
+            payload = str(
+                            {
+                                "startInfo": {
+                                    "ReleaseKey": release_key,
+                                    "InputArguments": inputs
+                                   }
+                            }
+                          )
+        else:
+            payload = str(
+                            {
+                                "startInfo": {
+                                    "ReleaseKey": release_key
+                                   }
+                            }
+                          )
         r = requests.post(url, data=payload, headers=headers)
 
         if r.status_code == 201:
